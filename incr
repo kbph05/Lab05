@@ -1,0 +1,33 @@
+-- Part 1 of lab05
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+
+entity incr is
+port( clk : in std_logic; -- clock
+		reset : in std_logic; -- resets the accumulator
+		f: out unsigned(5 downto 0)
+		);
+end incr;
+
+architecture func of incr is
+signal acc : unsigned(5 downto 0) := (others => '0'); -- unsigned value, 6 bits, 000000
+begin
+
+process (reset, clk)
+ begin
+ if reset = '1' --if reset is on 
+	then acc <= (others => '0'); -- set acc to 0
+		elsif rising_edge(clk) -- check for rising edge
+		then acc <= acc + 1; -- add 1 to acc
+ end if;
+ end process;
+ 
+ f <= acc;
+ 
+end func; 
+
+-- Number of flip flops used: 0 for some reason? I would check this
+-- 1. compilation report --> fitter --> resource section --> resource usage summary 2. Registers (flip flops)
