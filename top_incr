@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 entity top_incr is
 port( SW : in std_lOGIC_VECTOR(3 downto 0);
-		KEY : in std_logic;
+		KEY : in std_logic_vector(3 downto 0);
 		HEX0, HEX1 : out std_logic_VECTOR(6 downto 0)
 		);
 end top_incr;
@@ -12,24 +12,26 @@ end top_incr;
 architecture behavioural of top_incr is 
 
 	component Fcount is
-		port( d1 : in unsigned(3 downto 0);
-				clk : in std_logic; -- clock
-				y : out unsigned(5 downto 0)
+		port( D1 : in unsigned(3 downto 0);
+				clk, reset : in std_logic; -- clock and reset module (pt. 5)
+				f : out unsigned(5 downto 0)
 				);
+				
 	end component;
 	
 	component DispHEX is
-		Port ( d2 : in unsigned(5 downto 0);
-			Y0 : out STD_LOGIC_VECTOR(6 downto 0);
-			Y1 : out STD_LOGIC_VECTOR(6 downto 0)
+		Port ( D2 : in unsigned(5 downto 0);
+				Y0 : out STD_LOGIC_VECTOR(6 downto 0);
+				Y1 : out STD_LOGIC_VECTOR(6 downto 0)
 			);
 		end component;
 	signal y2d : unsigned(5 downto 0);
 	
 	begin
 	
-	u1 : Fcount port map(SW, KEY, y2d);
+	u1 : Fcount port map(unsigned(SW), KEY(0), KEY(1), y2d);
 	u2 : DispHEX port map (y2d, HEX0, HEX1);
 
 end behavioural;
 				
+					
