@@ -1,0 +1,32 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+
+entity Fcount is
+port( D1 : in unsigned(3 downto 0);
+		clk, reset : in std_logic; -- clock and reset module (pt. 5)
+		f : out unsigned(5 downto 0)
+		);
+end Fcount;
+
+architecture func of Fcount is
+
+	signal acc : unsigned(5 downto 0) := (others => '0');
+
+	begin
+
+	process (clk, reset)
+
+	begin 
+	if reset = '0' then 
+		acc <= (others => '0'); -- Part 5 resets output if reset pressed
+	elsif rising_edge(clk) then 
+			acc <= acc + D1;
+		end if;
+	end process;
+	
+	f <= acc;
+	
+end func; 
+
