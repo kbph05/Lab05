@@ -1,0 +1,89 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity Fcount_tb is
+end Fcount_tb;
+
+
+architecture Behavioral of Fcount_tb is
+
+   -- Component declaration for the Unit Under Test (UUT)
+
+  component Fcount is 
+	Port ( D1 : in UNSIGNED(3 downto 0);
+			clk : in STD_LOGIC;
+			f : out UNSIGNED(5 downto 0)
+        
+		  );
+
+   end component;
+
+   -- Testbench DUT signals
+
+   signal clock_tb : STD_LOGIC := '0';
+   signal D_tb : UNSIGNED(3 downto 0) := (others => '0');
+   signal Y_tb : UNSIGNED(5 downto 0);
+
+   -- Clock period definition
+
+   constant clk_period : time := 10 ns;
+   constant clk_hz: integer := 50e6; --frequency = 50 Mhz 
+
+begin
+
+   DUT: Fcount
+       Port map (
+
+           clk => clock_tb,
+           D1 => D_tb,
+           f => Y_tb
+       );
+
+   -- Clock generation
+
+   clock_process :process
+
+   begin
+
+       clock_tb <= '0';
+       wait for clk_period/2;
+		 
+       clock_tb <= '1';
+       wait for clk_period/2;
+
+   end process;
+
+
+   -- Stimulus process
+
+   stim_proc: process
+
+   begin
+
+       -- Initialize inputs
+
+       D_tb <= to_unsigned(3, 4);  -- Increment by 3
+
+       wait for 20 ns;
+
+       -- Test different increment values
+
+       D_tb <= to_unsigned(5, 4);  -- Increment by 5
+
+       wait for 20 ns;
+
+       D_tb <= to_unsigned(15, 4); -- Increment by 15 (maximum 4-bit value)
+
+       wait for 20 ns;
+
+       D_tb <= to_unsigned(1, 4);  -- Increment by 1
+
+       wait for 20 ns;
+       wait;
+
+	end process;
+	
+
+
+end Behavioral;
