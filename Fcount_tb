@@ -12,7 +12,7 @@ architecture Behavioral of Fcount_tb is
 
   component Fcount is 
 	Port ( D1 : in UNSIGNED(3 downto 0);
-			clk : in STD_LOGIC;
+			clk, reset : in STD_LOGIC;
 			f : out UNSIGNED(5 downto 0)
         
 		  );
@@ -22,6 +22,7 @@ architecture Behavioral of Fcount_tb is
    -- Testbench DUT signals
 
    signal clock_tb : STD_LOGIC := '0';
+	signal reset_tb : STD_LOGIC := '0';
    signal D_tb : UNSIGNED(3 downto 0) := (others => '0');
    signal Y_tb : UNSIGNED(5 downto 0);
 
@@ -34,8 +35,9 @@ begin
 
    DUT: Fcount
        Port map (
-
+			
            clk => clock_tb,
+			  reset => reset_tb,
            D1 => D_tb,
            f => Y_tb
        );
@@ -51,10 +53,23 @@ begin
 		 
        clock_tb <= '1';
        wait for clk_period/2;
-
+		 
    end process;
-
-
+	
+	reset_process : process
+	begin
+	
+		reset_tb <= '0';
+		wait for 10ns;
+			 
+		reset_tb <= '1';
+		wait for 10ns;
+	
+	end process;
+	
+	
+	
+	
    -- Stimulus process
 
    stim_proc: process
@@ -64,19 +79,12 @@ begin
        -- Initialize inputs
 
        D_tb <= to_unsigned(3, 4);  -- Increment by 3
-
        wait for 20 ns;
-
        -- Test different increment values
-
        D_tb <= to_unsigned(5, 4);  -- Increment by 5
-
        wait for 20 ns;
-
        D_tb <= to_unsigned(15, 4); -- Increment by 15 (maximum 4-bit value)
-
        wait for 20 ns;
-
        D_tb <= to_unsigned(1, 4);  -- Increment by 1
 
        wait for 20 ns;
