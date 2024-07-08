@@ -29,4 +29,7 @@ architecture func of Fcount is
 	f <= acc;
 	
 end func; 
+	
+	
+end func; 
 
